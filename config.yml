@@ -1,0 +1,312 @@
+# ============================================================
+#  AstraxEvent - cấu hình chính (BoxMine RPG)
+#  Màu: dùng mã & (ví dụ &c = đỏ). Sau khi sửa: /event reload
+#  Lệnh trong phần thưởng chạy bằng CONSOLE, dùng %player% cho tên người nhận.
+# ============================================================
+
+settings:
+  timezone: "Asia/Ho_Chi_Minh"      # múi giờ dùng cho lịch
+  min-players: 1                    # số người online tối thiểu để event TỰ ĐỘNG bắt đầu
+  warn-minutes-before: 5            # báo trước bao nhiêu phút (0 = tắt)
+  sound-warn: "block.note_block.bell"
+
+# ------------------------------------------------------------
+#  Cấu trúc mỗi phần thưởng (dùng ở rewards, kill-reward, loot, daily):
+#    money: 500                 # tiền Vault
+#    items: ["DIAMOND:3"]       # VẬT_PHẨM:số_lượng
+#    commands: ["give %player% apple 1"]
+#    message: "&aBạn nhận được..."
+#    chance: 100                # % cơ hội nhận (mặc định 100)
+#    weight: 1                  # chỉ dùng cho loot của Mưa Rương
+#    label: "&6Tên hiển thị"    # chỉ dùng cho loot của Mưa Rương
+# ------------------------------------------------------------
+
+events:
+
+  # ==========================================================
+  #  1) NGUYÊN TỐ THỨC TỈNH
+  #  Một nguyên tố được "thức tỉnh": người chơi thuộc nguyên tố đó
+  #  nhận buff + hiệu ứng hạt, mỗi lần hạ quái được tính điểm
+  #  và nhận thưởng nhỏ. Kết thúc: xếp hạng theo số quái hạ.
+  # ==========================================================
+  awakening:
+    enabled: true
+    display-name: "Nguyên Tố Thức Tỉnh"
+    schedule:
+      days: []                      # để trống = mọi ngày; ví dụ [SATURDAY, SUNDAY]
+      times: ["12:00", "19:30"]
+    duration-minutes: 30
+    min-players: 1
+    bossbar:
+      enabled: true
+      color: RED
+    sound-start: "entity.ender_dragon.growl"
+    worlds: []                      # để trống = mọi thế giới; ví dụ ["world"]
+    # Placeholder trả về nguyên tố của người chơi (lấy từ AstraxElementer qua PlaceholderAPI).
+    # Để trống = MỌI người chơi đều nhận buff. Ví dụ: "%astraxelementer_element%"
+    player-placeholder: ""
+    count-spawner-mobs: false       # quái từ spawner có tính điểm không
+    min-kills: 10                   # tối thiểu để vào bảng xếp hạng/nhận thưởng
+    pool: [hoa, bang, loi, tho, phong, quang]
+    elements:
+      hoa:
+        name: "Hỏa"
+        color: "&c"
+        bar-color: RED
+        particle: FLAME
+        buffs: ["STRENGTH:0", "FIRE_RESISTANCE:0"]
+        match: ["hỏa", "hoa", "fire"]
+      bang:
+        name: "Băng"
+        color: "&b"
+        bar-color: BLUE
+        particle: SNOWFLAKE
+        buffs: ["RESISTANCE:0", "SPEED:0"]
+        match: ["băng", "bang", "ice"]
+      loi:
+        name: "Lôi"
+        color: "&d"
+        bar-color: PURPLE
+        particle: ELECTRIC_SPARK
+        buffs: ["SPEED:1", "HASTE:0"]
+        match: ["lôi", "loi", "lightning"]
+      tho:
+        name: "Thổ"
+        color: "&6"
+        bar-color: GREEN
+        particle: CRIT
+        buffs: ["RESISTANCE:1", "ABSORPTION:0"]
+        match: ["thổ", "tho", "earth"]
+      phong:
+        name: "Phong"
+        color: "&a"
+        bar-color: WHITE
+        particle: CLOUD
+        buffs: ["SPEED:1", "JUMP_BOOST:1", "SLOW_FALLING:0"]
+        match: ["phong", "wind"]
+      quang:
+        name: "Quang"
+        color: "&e"
+        bar-color: YELLOW
+        particle: END_ROD
+        buffs: ["REGENERATION:0", "NIGHT_VISION:0"]
+        match: ["quang", "light"]
+    # Thưởng mỗi lần hạ 1 quái trong lúc event diễn ra.
+    # Gợi ý: thêm lệnh cộng EXP Elementer của bạn vào commands.
+    kill-reward:
+      chance: 35
+      money: 20
+      commands: []
+      # commands: ["elementeradmin give %player% exp 5"]   # <- đổi theo lệnh thật của AstraxElementer
+    rewards:
+      rank-1:
+        money: 3000
+        items: ["DIAMOND:5"]
+        message: "&6&lHạng 1 Nguyên Tố Thức Tỉnh! &eChúc mừng!"
+      rank-2:
+        money: 2000
+        items: ["DIAMOND:3"]
+        message: "&eBạn đứng hạng 2 Nguyên Tố Thức Tỉnh!"
+      rank-3:
+        money: 1200
+        items: ["DIAMOND:2"]
+        message: "&eBạn đứng hạng 3 Nguyên Tố Thức Tỉnh!"
+      participation:
+        money: 300
+        message: "&7Cảm ơn bạn đã tham gia Nguyên Tố Thức Tỉnh."
+
+  # ==========================================================
+  #  2) BOSS THẾ GIỚI
+  #  Boss xuất hiện ngẫu nhiên, cả server cùng đánh. Thưởng theo
+  #  sát thương gây ra + thưởng đòn kết liễu.
+  #  Dùng MythicMobs nếu điền mythic-id, nếu không dùng boss vanilla.
+  # ==========================================================
+  boss:
+    enabled: true
+    display-name: "Boss Thế Giới"
+    schedule:
+      days: []
+      times: ["20:00"]
+    duration-minutes: 15
+    min-players: 3
+    bossbar:
+      enabled: true
+      color: RED
+    sound-start: "entity.wither.spawn"
+    worlds: ["world"]
+    spawn:
+      mode: random                  # random | fixed
+      use-world-spawn: true         # true: lấy tâm là điểm spawn thế giới; false: dùng center-x/center-z
+      center-x: 0
+      center-z: 0
+      min-radius: 200
+      max-radius: 1500
+      fixed-locations: []           # dùng khi mode: fixed. Ví dụ ["world,100,70,100"]
+    announce-coordinates: true      # công khai tọa độ boss
+    reminder-seconds: 60            # cứ mỗi bao nhiêu giây nhắc lại HP + vị trí (0 = tắt)
+    clear-drops: true               # xóa đồ rơi của boss (chỉ phát thưởng bằng rewards)
+    min-damage: 100                 # sát thương tối thiểu để nhận thưởng
+    boss:
+      name: "&c&lHỏa Long Cổ Đại"
+      mythic-id: ""                 # ID mob MythicMobs, ví dụ "FireDragon"
+      mythic-command: "mm mobs spawn {mob} 1 {world},{x},{y},{z}"
+      type: WITHER_SKELETON         # boss vanilla dự phòng
+      health: 1500                  # tối đa 1024 (hoặc 2048 nếu spigot.yml cho phép)
+      attack-damage: 14
+      glowing: true
+      aura-particle: FLAME
+    rewards:
+      rank-1:
+        money: 8000
+        items: ["NETHERITE_INGOT:1", "DIAMOND:10"]
+        message: "&6&lBạn là sát thủ số 1 của Boss Thế Giới!"
+      rank-2:
+        money: 5000
+        items: ["DIAMOND:8"]
+      rank-3:
+        money: 3000
+        items: ["DIAMOND:5"]
+      participation:
+        money: 1000
+        items: ["DIAMOND:1"]
+        message: "&7Bạn nhận phần thưởng tham gia đánh Boss."
+      last-hit:
+        money: 2000
+        message: "&c&lĐòn kết liễu! &eBạn nhận thêm thưởng."
+
+  # ==========================================================
+  #  3) KHE NỨT NGUYÊN TỐ
+  #  Một khe nứt mở ra, quái ập đến theo từng đợt (wave). Cùng nhau
+  #  dọn sạch tất cả các đợt trước khi hết giờ.
+  #  Quái: "LOẠI:SỐ_LƯỢNG" (vanilla) hoặc "mm:IDMythic:SỐ_LƯỢNG".
+  #  Lưu ý: dùng quái miễn nhiễm nắng (HUSK, STRAY...). Quái đều được buff chống cháy.
+  # ==========================================================
+  rift:
+    enabled: true
+    display-name: "Khe Nứt Nguyên Tố"
+    schedule:
+      days: []
+      times: ["15:00", "21:00"]
+    duration-minutes: 20
+    min-players: 2
+    bossbar:
+      enabled: true
+      color: PURPLE
+    sound-start: "block.end_portal.spawn"
+    worlds: ["world"]
+    spawn:
+      mode: random
+      use-world-spawn: true
+      center-x: 0
+      center-z: 0
+      min-radius: 150
+      max-radius: 1200
+      fixed-locations: []
+    announce-coordinates: true
+    mythic-command: "mm mobs spawn {mob} 1 {world},{x},{y},{z}"
+    ring-radius: 3
+    join-radius: 30                 # người chơi trong bán kính này nhận thông báo đợt
+    first-wave-delay-seconds: 20
+    wave-delay-seconds: 10
+    health-multiplier-per-wave: 0.15  # mỗi đợt máu quái +15% (0 = tắt)
+    glowing: false
+    min-kills: 3                    # tối thiểu để nhận thưởng
+    clear-drops: false
+    waves:
+      wave-1: ["HUSK:8", "STRAY:4"]
+      wave-2: ["HUSK:10", "STRAY:6", "WITCH:2"]
+      wave-3: ["VINDICATOR:6", "PILLAGER:6", "WITCH:3"]
+      wave-4: ["RAVAGER:1", "EVOKER:3", "VINDICATOR:6"]
+    rewards:
+      rank-1:
+        money: 4000
+        items: ["DIAMOND:6"]
+      rank-2:
+        money: 2500
+        items: ["DIAMOND:4"]
+      rank-3:
+        money: 1500
+        items: ["DIAMOND:2"]
+      completion:                    # tặng cho MỌI người đủ điều kiện khi hoàn thành khe nứt
+        money: 1500
+        items: ["EXPERIENCE_BOTTLE:16"]
+        message: "&5Bạn đã cùng đóng Khe Nứt Nguyên Tố!"
+      failure:                       # an ủi khi hết giờ mà chưa dọn xong
+        money: 300
+        message: "&7Khe nứt đã nuốt chửng... lần sau cố gắng hơn nhé."
+
+  # ==========================================================
+  #  4) MƯA RƯƠNG KHO BÁU
+  #  Nhiều rương thả xuống khắp thế giới. Ai chuột phải trước người đó nhận.
+  # ==========================================================
+  treasure:
+    enabled: true
+    display-name: "Mưa Rương Kho Báu"
+    schedule:
+      days: []
+      times: ["17:00", "22:00"]
+    duration-minutes: 10
+    min-players: 2
+    bossbar:
+      enabled: true
+      color: YELLOW
+    sound-start: "entity.firework_rocket.launch"
+    worlds: ["world"]
+    spawn:
+      mode: random
+      use-world-spawn: true
+      center-x: 0
+      center-z: 0
+      min-radius: 100
+      max-radius: 1000
+      fixed-locations: []
+    chest-count: 8
+    hint: exact                     # exact (tọa độ chính xác) | rounded (làm tròn, chỉ khu vực) | none (tự đi tìm)
+    round-to: 50                    # dùng cho hint: rounded
+    rolls: 1                        # số lần bốc thưởng mỗi rương
+    loot:
+      common:
+        weight: 60
+        label: "&7Rương Thường"
+        money: 400
+        items: ["COOKED_BEEF:16", "IRON_INGOT:8"]
+      rare:
+        weight: 30
+        label: "&bRương Hiếm"
+        money: 1200
+        items: ["DIAMOND:3", "GOLDEN_APPLE:2"]
+      epic:
+        weight: 10
+        label: "&6&lRương Sử Thi"
+        money: 3500
+        items: ["DIAMOND:8", "ENCHANTED_GOLDEN_APPLE:1"]
+
+# ============================================================
+#  ĐIỂM DANH HẰNG NGÀY (chuỗi đăng nhập liên tiếp)
+# ============================================================
+daily:
+  enabled: true
+  remind-on-join: true              # nhắc điểm danh khi vào server
+  auto-claim-on-join: false         # true: tự động điểm danh luôn khi vào
+  grace-days: 0                     # được bỏ lỡ bao nhiêu ngày mà vẫn giữ chuỗi
+  cycle: 30                         # sau bao nhiêu ngày thì lặp lại từ ngày 1
+  sound: "entity.player.levelup"
+  rewards:
+    default:
+      money: 200
+      items: ["BREAD:8"]
+    day-3:
+      money: 500
+      items: ["IRON_INGOT:16"]
+    day-7:
+      money: 1500
+      items: ["DIAMOND:3"]
+      message: "&6Mốc 7 ngày liên tiếp! Phần thưởng lớn dành cho bạn."
+    day-14:
+      money: 3500
+      items: ["DIAMOND:8"]
+      message: "&6Mốc 14 ngày liên tiếp!"
+    day-30:
+      money: 10000
+      items: ["NETHERITE_INGOT:1", "DIAMOND:16"]
+      message: "&6&lMốc 30 ngày liên tiếp! Bạn thật kiên trì!"

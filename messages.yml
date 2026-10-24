@@ -1,0 +1,114 @@
+# ============================================================
+#  AstraxEvent - thông báo (sửa thoải mái, dùng mã màu &)
+#  {prefix} sẽ được thay bằng prefix bên dưới. Giữ nguyên các {biến}.
+# ============================================================
+prefix: "&8[&6Sự Kiện&8] &r"
+
+common:
+  warn: "{prefix}&e{event} &7sẽ bắt đầu sau &f{minutes} phút&7!"
+  cancelled: "{prefix}&c{event} &7đã bị hủy."
+  result-header: "{prefix}&6&lKết quả {event}&6&l:"
+  rank-line: "  &e#{rank} &f{player} &7- &a{score}"
+  no-participants: "{prefix}&7Không có ai đủ điều kiện nhận thưởng &e{event}&7."
+  disabled: "&8(tắt)"
+  none: "Không có"
+  no-permission: "{prefix}&cBạn không có quyền dùng lệnh này."
+  players-only: "{prefix}&cChỉ người chơi mới dùng được lệnh này."
+  unknown-event: "{prefix}&cKhông có event '&f{id}&c'. Có: awakening, boss, rift, treasure."
+  already-running: "{prefix}&c{event} &7đang diễn ra, hãy chờ nó kết thúc."
+  not-enough-players: "{prefix}&cChưa đủ người chơi online (cần &f{min}&c)."
+  start-failed: "{prefix}&cKhông thể bắt đầu {event} (xem console để biết lý do)."
+  started: "{prefix}&aĐã bắt đầu &f{event}&a."
+  stopped: "{prefix}&aĐã dừng event đang chạy."
+  nothing-running: "{prefix}&7Hiện không có event nào đang diễn ra."
+  reloaded: "{prefix}&aĐã tải lại cấu hình."
+  where-none: "{prefix}&7Không có thông tin vị trí lúc này."
+  coords: "&f{world} &7({x}, {y}, {z})"
+  coords-hidden: "&7(tọa độ được giấu - hãy đi tìm!)"
+  coords-rounded: "&7khu vực quanh &f{world} ({x}, {z})"
+
+awakening:
+  start:
+    - ""
+    - "{prefix}&6&l✦ NGUYÊN TỐ THỨC TỈNH ✦"
+    - "&7Nguyên tố &f{element} &7đã thức tỉnh trong &f{minutes} phút&7!"
+    - "&7Người thuộc nguyên tố này nhận buff, hạ quái để tích điểm xếp hạng."
+    - ""
+  title: "&6✦ {element} Thức Tỉnh ✦"
+  subtitle: "&7Hạ quái để tích điểm, nhận thưởng!"
+  actionbar: "{element} &7| Số quái đã hạ: &f{kills}"
+  end: "{prefix}&7Nguyên tố {element} &7đã chìm vào giấc ngủ."
+  bar: "&6✦ {event}: {element} &7- còn &f{time}"
+
+boss:
+  spawn:
+    - ""
+    - "{prefix}&c&l☠ BOSS THẾ GIỚI XUẤT HIỆN! ☠"
+    - "&7Tên: {name} &8| &7HP: &c{hp}"
+    - "&7Vị trí: {coords}"
+    - "&7Hạ gục trong &f{minutes} phút &7để nhận thưởng theo sát thương!"
+    - ""
+  title: "&c☠ {name} ☠"
+  subtitle: "&7Boss Thế Giới đã xuất hiện!"
+  reminder: "{prefix}{name} &7còn &c{hp}% &7HP tại {coords}"
+  killed: "{prefix}{name} &7đã bị hạ gục! Đòn kết liễu thuộc về &c{player}&7."
+  escaped: "{prefix}{name} &7đã tẩu thoát vì không ai hạ nổi..."
+  bar: "&c☠ {name} &7- HP &f{hp}% &7- còn &f{time}"
+  where: "{prefix}Boss {name} &7hiện ở {coords}"
+  detail: "Boss còn {hp}% HP"
+
+rift:
+  start:
+    - ""
+    - "{prefix}&5&l⚔ KHE NỨT NGUYÊN TỐ MỞ RA! ⚔"
+    - "&7Vị trí: {coords}"
+    - "&7Dọn sạch &f{waves} đợt quái &7trong &f{minutes} phút &7để nhận thưởng."
+    - ""
+  title: "&5⚔ Khe Nứt Nguyên Tố ⚔"
+  subtitle: "&7Hãy tới và cùng nhau đóng khe nứt!"
+  wave-title: "&5Đợt {wave}/{waves}"
+  wave-subtitle: "&7Quái đang ập tới: &f{count}"
+  wave-cleared: "{prefix}&aĐợt {wave} đã bị dọn sạch! Đợt tiếp theo sau &f{delay}s&a."
+  complete: "{prefix}&5Khe Nứt Nguyên Tố đã được đóng lại! Chúc mừng các chiến binh!"
+  failed: "{prefix}&cKhe Nứt Nguyên Tố đã nuốt chửng vùng đất... không ai kịp đóng nó."
+  bar: "&5⚔ {event} &7- Đợt &f{wave}/{waves} &7- Còn &f{alive} &7quái - &f{time}"
+  where: "{prefix}Khe Nứt đang ở {coords}"
+  detail: "Đợt {wave}/{waves}, còn {alive} quái"
+
+treasure:
+  start:
+    - ""
+    - "{prefix}&6&l✦ MƯA RƯƠNG KHO BÁU! ✦"
+    - "&7Có &f{count} &7rương vừa rơi xuống. Chuột phải để mở, ai nhanh người đó có!"
+    - "&7Thời gian: &f{minutes} phút"
+  coord-line: "  &e#{n} &f{world} &7({x}, {y}, {z})"
+  coord-line-rounded: "  &e#{n} &7khu vực quanh &f{world} ({x}, {z})"
+  coord-hidden: "&7Hãy tự mình đi khám phá để tìm rương!"
+  title: "&6✦ Mưa Rương Kho Báu ✦"
+  subtitle: "&7Tìm rương và chuột phải để mở!"
+  claimed: "{prefix}&f{player} &7đã mở được {label} &7(còn &f{left}/{total}&7 rương)"
+  end: "{prefix}&7Mưa Rương kết thúc. Đã có &f{claimed}/{total} &7rương được mở."
+  use-rightclick: "{prefix}&7Hãy &fchuột phải &7để mở rương này."
+  bar: "&6✦ {event} &7- Rương còn &f{left}/{total} &7- &f{time}"
+  detail: "Còn {left}/{total} rương"
+
+daily:
+  claimed: "{prefix}&aĐiểm danh thành công! Chuỗi: &f{streak} ngày &7(ngày {day}/{cycle} của chu kỳ)."
+  already: "{prefix}&7Hôm nay bạn đã điểm danh rồi. Chuỗi hiện tại: &f{streak} ngày&7."
+  disabled: "{prefix}&cĐiểm danh đang tắt."
+  reminder: "{prefix}&eBạn chưa điểm danh hôm nay! &a&n[Bấm để điểm danh]"
+  state-claimed: "Đã nhận"
+  state-unclaimed: "Chưa nhận"
+
+cmd:
+  status-header: "{prefix}&6&lTrạng thái sự kiện:"
+  status-line: "  &e{name} &8(&7{id}&8) &7- {state}"
+  state-running: "&aĐANG DIỄN RA &7(còn &f{time}&7) {detail}"
+  help:
+    - "{prefix}&6&lAstraxEvent &7- lệnh:"
+    - "  &e/event &7- xem trạng thái các sự kiện"
+    - "  &e/event where &7- xem vị trí của event đang diễn ra"
+    - "  &e/diemdanh &7- điểm danh nhận quà hằng ngày"
+    - "  &e/event start <awakening|boss|rift|treasure> [nguyên tố] &7- (admin)"
+    - "  &e/event stop &7- (admin) dừng event đang chạy"
+    - "  &e/event reload &7- (admin) tải lại cấu hình"

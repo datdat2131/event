@@ -1,0 +1,28 @@
+name: AstraxEvent
+version: '1.0.0'
+main: me.astrax.event.AstraxEventPlugin
+api-version: '1.21'
+authors: [Astrax]
+description: Hệ thống sự kiện cho BoxMine RPG - Nguyên Tố Thức Tỉnh, Boss Thế Giới, Khe Nứt, Mưa Rương, Điểm Danh
+softdepend: [Vault, PlaceholderAPI, MythicMobs, AstraxElementer, AstraxQuest, AstraxPetRPG]
+
+commands:
+  event:
+    description: Xem trạng thái và quản lý sự kiện
+    aliases: [sukien, astraxevent]
+    usage: '/event [status|where|start|stop|reload]'
+  diemdanh:
+    description: Điểm danh nhận quà mỗi ngày
+    aliases: [checkin, daily]
+    usage: '/diemdanh'
+
+permissions:
+  astraxevent.use:
+    description: Xem trạng thái sự kiện
+    default: true
+  astraxevent.daily:
+    description: Điểm danh hằng ngày
+    default: true
+  astraxevent.admin:
+    description: Bắt đầu, dừng, tải lại sự kiện
+    default: op
